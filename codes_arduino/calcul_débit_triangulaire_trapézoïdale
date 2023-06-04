@@ -1,0 +1,146 @@
+//tableau lcd
+#include <Wire.h>
+#include "rgb_lcd.h"
+
+rgb_lcd lcd;
+
+const int colorR = 0;
+const int colorG = 255;
+const int colorB = 0;
+
+boolean triangulaire = false;
+boolean trapezoidale = false ;
+
+//boutons
+int x;
+
+boolean button1WasUp = true;
+boolean button2WasUp = true;
+boolean button3WasUp = true;
+
+
+//débit - sonnar
+const int trig=9;
+const int echo=8;
+float lecture_echo=0;//valeur mesurée du temps
+float distance = 0;
+float resultat = 0;
+
+void setup() {
+  Serial.begin(9600);
+
+  
+  //débit
+  Serial.begin(9600);
+  pinMode(trig,OUTPUT);
+  pinMode(echo,INPUT);
+
+  //boutons
+   pinMode(2, INPUT_PULLUP);
+   pinMode(3, INPUT_PULLUP);
+   pinMode(4, INPUT_PULLUP);
+
+   
+     //------
+  lcd.begin(16, 2);
+  lcd.setRGB(colorR, colorG, colorB);
+
+  delay(100);
+}
+
+void loop() {
+   boolean button1IsUp = digitalRead(2);   // connaître l'état des boutons
+   boolean button2IsUp = digitalRead(3);
+   boolean button3IsUp = digitalRead(4);
+    
+   // si le bouton 1 a été pressé, incrémenter la variable "x"
+   if (button1WasUp && !button1IsUp) {
+     delay(10);
+     button1IsUp = digitalRead(2);
+     if (!button1IsUp) {
+       x = x + 1;
+       
+       if (x%2 ==0) {
+         lcd.clear();
+         triangulaire = true;
+         lcd.print("triangulaire");
+         trapezoidale = false;
+         }
+         
+       else {
+         lcd.clear();
+         trapezoidale = true;
+         lcd.print("trapezoidale");
+         triangulaire = false;
+       }
+     }
+   }
+   button1WasUp = button1IsUp; // mémoriser l'état du bouton 1
+
+   // si le bouton 2 a été pressé, réduire la variable "x"
+   if (button2WasUp && !button2IsUp) {
+     delay(10);
+     button2IsUp = digitalRead(3);
+     if (!button2IsUp) {
+       if (triangulaire) {
+        lcd.setCursor(0, 1);
+            lcd.print(" ");
+           //lcd.clear();
+            digitalWrite(trig,HIGH);
+            delayMicroseconds(10);
+            digitalWrite(trig,LOW);
+            lecture_echo=pulseIn(echo,HIGH);
+            //delay(600);
+            distance = ((lecture_echo)/2)*0.034*pow(10,-2);
+            resultat=(pow(distance,5/2))*1.42;
+            Serial.println(resultat);
+
+            //tableau
+            //lcd.print("Debit mesure");
+           // lcd.setCursor(0, 1);
+            lcd.print(resultat);
+            delay(600);
+         }
+       if (trapezoidale){
+          //lcd.clear();
+          lcd.setCursor(0, 1);
+            lcd.print(" ");
+            digitalWrite(trig,HIGH);
+            delayMicroseconds(10);
+            digitalWrite(trig,LOW);
+            lecture_echo=pulseIn(echo,HIGH);
+            //delay(600);
+            distance = ((lecture_echo)/2)*0.034*pow(10,-2);
+            resultat=1.32*pow(distance,2.47)*tan(0.2)+1.69*pow(0.05,1.02)*pow(distance,1.47);
+            Serial.println(resultat);
+
+            //tableau
+            //lcd.print("Debit mesure");
+            
+            lcd.print(resultat);
+            delay(600);
+       }
+
+     }
+   }
+   button2WasUp = button2IsUp; // mémoriser l'état du bouton 2
+
+    // si le bouton 3 a été pressé, réduire la variable "x"
+   if (button3WasUp && !button3IsUp) {
+     delay(10);
+     button3IsUp = digitalRead(4);
+     if (!button3IsUp) {
+        if (triangulaire) {
+           lcd.clear();
+
+         }
+       if (trapezoidale){
+          lcd.clear();
+
+       }
+
+}
+   }
+
+   button3WasUp = button3IsUp; // mémoriser l'état du bouton 3
+}
