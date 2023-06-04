@@ -1,0 +1,30 @@
+//------------------Projet - plaque déversoir--------------//
+
+//Groupe de travail : IDAM, CREZE, BASTIDE 
+//Autrice : BASTIDE Victoria
+//Date : 18/05/2023
+//année scolaire : génie de l'eau 3, 2eme semestre
+
+//-----------------------------------------------//
+clear
+clc
+close(winsid())
+
+//plaque déversoire rectangulaire
+h = [0.01, 0.015, 0.02, 0.025, 0.03, 0.035, 0.04] //hauteur de la surface liquide amont par rapport au point bas de l’échancrure [m]
+Q_exp = [0.03234613884, 0.07076112095, 0.1337514113, 0.216863178, 0.3050238086, 0.351374809, 0.4450948113]/1000 //[m3/s]
+
+Q_th = [0.1236604842, 0.2207458348, 0.3346582198, 0.4632125849, 0.604904771, 0.7586168307, 0.9234753694]/1000 //[m3/s] - formule de Thompson
+
+//plot - comparaison simple entre Q_exp et Q_th
+scf(1)
+plot(h,Q_exp,'r--o',h,Q_th,'b--o')
+legend(['Débit expérimental';'Débit théorique'],4)
+title('Plaque déversoire rectangulaire')
+xlabel('h - hauteur de la surface liquide amont par rapport au point bas de l’échancrure [m]')
+ylabel('Q - débits calculés et mesurés [m3/s]')
+xgrid()
+a = gca()
+a.data_bounds = [0.008,0.02/1000  ;0.045, 0.93/1000]
+
+
