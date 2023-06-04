@@ -1,0 +1,28 @@
+//------------------Projet - plaque déversoir--------------//
+
+//Groupe de travail : IDAM, CREZE, BASTIDE 
+//Autrice : BASTIDE Victoria
+//Date : 18/05/2023
+//année scolaire : génie de l'eau 3, 2eme semestre
+
+//-----------------------------------------------//
+clear
+clc
+close(winsid())
+
+//plaque déversoire trapézoïdale
+h = [0.015 0.02 0.025 0.03] //hauteur de la surface liquide amont par rapport au point bas de l’échancrure [m]
+Q_exp = [0.175 0.253 0.403 0.546]/1000 //[m3/s]
+
+Q_th = [0.1742039964 0.2701551586 0.3809416221 0.5057522841]/1000 //[m3/s] - formule de Thompson
+
+//plot - comparaison simple entre Q_exp et Q_th
+scf(1)
+plot(h,Q_exp,'r--o',h,Q_th,'b--o')
+legend(['Débit expérimental';'Débit théorique'],4)
+title('Plaque déversoire trapézoïdale')
+xlabel('h - hauteur de la surface liquide amont par rapport au point bas de l’échancrure [m]')
+ylabel('Q - débits calculés et mesurés [m3/s]')
+xgrid()
+a = gca()
+a.data_bounds = [0.014,0  ;0.031, 0.55/1000]
