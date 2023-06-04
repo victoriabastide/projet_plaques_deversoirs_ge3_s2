@@ -1,0 +1,56 @@
+//calcul du débit pour un seuil trapezoïdale en cm3/s
+//tableau lcd
+#include <Wire.h>
+#include "rgb_lcd.h"
+
+rgb_lcd lcd;
+
+const int colorR = 255;
+const int colorG = 0;
+const int colorB = 0;
+
+
+//---------
+//sonar
+const int trig=9;
+const int echo=8;
+float lecture_echo=0;//valeur mesurée du temps
+float distance = 0;
+float resultat = 0;
+
+//-------
+void setup() {
+  // put your setup code here, to run once:
+  //sonar
+  Serial.begin(9600);
+  pinMode(trig,OUTPUT);
+  pinMode(echo,INPUT);
+  
+  //------
+  lcd.begin(16, 2);
+  lcd.setRGB(colorR, colorG, colorB);
+  //lcd.print("hello, world!");
+  
+  delay(100);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  //sonar
+  lcd.clear();
+  
+  digitalWrite(trig,HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trig,LOW);
+  lecture_echo=pulseIn(echo,HIGH);
+  //delay(600);
+  distance = ((lecture_echo)/2)*0.034*pow(10,-2);
+  resultat=1.32*pow(distance,2.47)*tan(0.2)+1.69*pow(0.05,1.02)*pow(distance,1.47);
+  Serial.println(resultat*1000);
+  //tableau
+  lcd.print("Debit mesure");
+  lcd.setCursor(0, 1);
+  lcd.print(resultat*1000);
+  delay(600);
+  
+}
