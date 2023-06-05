@@ -17,7 +17,7 @@ const int echo=8;
 float lecture_echo=0;//valeur mesurée du temps
 float distance = 0;
 float resultat = 0;
-int hauteur = 80*pow(10,-2); //hauteur du canal hydraulique
+int H = 18*pow(10,-2); //hauteur du canal hydraulique
 
 //-------
 void setup() {
@@ -46,8 +46,8 @@ void loop() {
   lecture_echo=pulseIn(echo,HIGH);
   //delay(600);
   distance=((lecture_echo)/2)*0.00034;//calcul en mêtre
-  resultat=(pow(distance,2.5))*1.42*1000;
-  Serial.println(resultat);
+  resultat=(((pow(distance,2.5))*1.42))*1000;
+  Serial.println(resultat,5);
 
   //tableau
   lcd.print("Debit mesure");
