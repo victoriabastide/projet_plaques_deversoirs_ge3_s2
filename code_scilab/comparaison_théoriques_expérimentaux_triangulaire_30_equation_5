@@ -1,0 +1,51 @@
+//------------------Projet - plaque déversoir--------------//
+
+//Groupe de travail : IDAM, CREZE, BASTIDE 
+//Autrice : BASTIDE Victoria
+//Date : 18/05/2023
+//année scolaire : génie de l'eau 3, 2eme semestre
+
+//-----------------------------------------------//
+clear
+clc
+close(winsid())
+
+//plaque déversoire triangulaire θ = 30°, équation 5
+h = [0.03, 0.035, 0.04,0.045, 0.05, 0.055, 0.06] //hauteur de la surface liquide amont par rapport au point bas de l’échancrure [m]
+Q_exp = [0.05697282075 , 0.07699033734 ,0.1547135778 , 0.1808564938, 0.2527664751,0.3009886534, 0.3938612286 ]/1000 //[m3/s]
+
+Q_th = [0.05984557678 0.08757711359 0.121795358 0.16292115 0.2113481587 0.2674474127 0.3315707001]/1000 //[m3/s] - formule de Thompson
+
+//plot - comparaison simple entre Q_exp et Q_th
+scf(1)
+plot(h,Q_exp,'r--o',h,Q_th,'b--o')
+legend(['Débit expérimental';'Débit théorique'],4)
+title('Plaque déversoire triangulaire avec θ = 30°')
+xlabel('h - hauteur de la surface liquide amont par rapport au point bas de l’échancrure [m]')
+ylabel('Q - débits calculés et mesurés [m3/s]')
+xgrid()
+a = gca()
+a.data_bounds = [0.029,0  ;0.065, 0.4/1000]
+
+//erreur relative des moyennes des débits
+Q_exp_moyen = sum(Q_exp)/length(Q_exp)
+Q_th_moyen = sum(Q_th)/length(Q_th)
+
+erreur_relative = abs(Q_exp_moyen - Q_th_moyen)/Q_exp_moyen
+//disp('erreur relative des débits =',erreur_relative)
+
+erreur_relative_pourcentage = erreur_relative*100 
+//disp('pourcentage des erreurs =', erreur_relative_pourcentage)
+
+if erreur_relative_pourcentage < 10 then
+    disp('L erreur relative est correcte,donc cette plaque soit retenue et le proucentage d erreur relative est de ', erreur_relative_pourcentage)
+else 
+    disp('L erreur relative est trop importante pour que cette plaque soit retenue et le proucentage d erreur relative est de ', erreur_relative_pourcentage')
+end
+
+
+//---------------------------------------------------------------------------------------------------------//
+//résultat
+//  "L erreur relative est trop importante pour que cette plaque soit retenue et le proucentage d erreur relative est de "
+
+//   12.323619
