@@ -25,7 +25,10 @@ const int echo=8;
 float lecture_echo=0;//valeur mesurée du temps
 float distance = 0;
 float resultat = 0;
-
+float H = 18*pow(10,-2); //hauteur du canal hydraulique
+float hauteur;
+float Ptrap = 0.076; //[m]
+float Ptrin = 0.074; //[m]
 void setup() {
   Serial.begin(9600);
 
@@ -91,14 +94,16 @@ void loop() {
             digitalWrite(trig,LOW);
             lecture_echo=pulseIn(echo,HIGH);
             //delay(600);
-            distance = ((lecture_echo)/2)*0.034*pow(10,-2);
-            resultat=(pow(distance,5/2))*1.42;
-            Serial.println(resultat);
+            distance = (((lecture_echo)/2)*0.034)*pow(10,-2);
+            hauteur = H- Ptrin - distance;
+            Serial.println(hauteur,5);
+            resultat=(((pow(hauteur,2.5))*1.42))*1000;
+            Serial.println(resultat,5);
 
             //tableau
             //lcd.print("Debit mesure");
            // lcd.setCursor(0, 1);
-            lcd.print(resultat);
+            lcd.print(resultat,5);
             delay(600);
          }
        if (trapezoidale){
@@ -111,13 +116,15 @@ void loop() {
             lecture_echo=pulseIn(echo,HIGH);
             //delay(600);
             distance = ((lecture_echo)/2)*0.034*pow(10,-2);
-            resultat=1.32*pow(distance,2.47)*tan(0.2)+1.69*pow(0.05,1.02)*pow(distance,1.47);
-            Serial.println(resultat);
+            hauteur = H- Ptrin - distance;
+            Serial.println(hauteur,5);
+            resultat=((1.32*pow(hauteur,2.47)*tan(0.2)+1.69*pow(0.05,1.02)*pow(hauteur,1.47)))*1000;
+            Serial.println(resultat,5);
 
             //tableau
             //lcd.print("Debit mesure");
             
-            lcd.print(resultat);
+            lcd.print(resultat,5);
             delay(600);
        }
 
