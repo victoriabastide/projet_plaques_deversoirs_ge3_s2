@@ -1,0 +1,41 @@
+//------------------Projet - plaque déversoir--------------//
+
+//Groupe de travail : IDAM, CREZE, BASTIDE 
+//Autrice : BASTIDE Victoria
+//Date : 07/06/2023
+//année scolaire : génie de l'eau 3, 2eme semestre
+
+//-----------------------------------------------//
+clear
+clc
+close(winsid())
+
+//plaque déversoire triangulaire θ = 90°
+h_arduino = [1.54E-02 2.08E-02 2.51E-02 2.98E-02 3.52E-02 3.97E-02] //hauteur de la surface liquide amont par rapport au point bas de l’échancrure [m]
+Q_arduino = [4.23E-02 8.88E-02 1.41E-01 2.17E-01 3.31E-01 4.48E-01]/1000 //[m3/s]
+
+h_exp = [34.5 40] /1000
+//5,80E-01	4,50E-02
+Q_exp=[0.0002770229912 0.0004280821918]
+
+//plot - comparaison simple entre Q_exp et Q_th
+scf(1)
+plot(h_arduino,Q_arduino,'r--o')
+plot(h_exp,Q_exp,'b--o')
+legend(['Débit arduino';'Débit expérimental'],4)
+title('Plaque déversoire triangulaire avec θ = 90°')
+xlabel('h - hauteur de la surface liquide amont par rapport au point bas de l’échancrure [m]')
+ylabel('Q - débits calculés et mesurés [m3/s]')
+xgrid()
+a = gca()
+a.data_bounds = [1.45E-02,4.23E-02/1000 ;4.2E-02, 4.7E-01/1000]
+
+//erreur relative des moyennes des débits
+Q_exp_moyen = sum(Q_exp)/length(Q_exp)
+Q_th_moyen = sum(Q_arduino)/length(Q_arduino)
+
+erreur_relative = abs(Q_exp_moyen - Q_th_moyen)/Q_exp_moyen
+disp('erreur relative des débits =',erreur_relative)
+
+erreur_relative_pourcentage = erreur_relative*100 
+disp('pourcentage des erreurs =', erreur_relative_pourcentage)
